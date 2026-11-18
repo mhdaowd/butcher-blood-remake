@@ -1,0 +1,226 @@
+[gd_scene format=3 uid="uid://cs0jttdhci7by"]
+
+[ext_resource type="Script" uid="uid://dl5unwdh004jf" path="res://scripts/butcher.gd" id="1_dwmhh"]
+[ext_resource type="Texture2D" uid="uid://cakb0k3vk02ey" path="res://assets/frame0000.png" id="1_ni3s5"]
+[ext_resource type="Texture2D" uid="uid://pujue54i36ld" path="res://assets/frame0001.png" id="2_dwmhh"]
+[ext_resource type="Texture2D" uid="uid://c7stpq0qygyey" path="res://assets/frame0002.png" id="3_q3x0e"]
+[ext_resource type="Texture2D" uid="uid://cg7ov4v3t622u" path="res://assets/frame0004.png" id="4_rpx01"]
+[ext_resource type="Texture2D" uid="uid://df1dumwyh4kx8" path="res://assets/frame0003.png" id="5_kva4e"]
+[ext_resource type="Texture2D" uid="uid://cavsanvnxemdm" path="res://assets/Bat.png" id="6_c2fju"]
+[ext_resource type="Shader" uid="uid://bgkdbrbqjeby6" path="res://shaders/blood_overlay.gdshader" id="7_overlay"]
+[ext_resource type="Script" uid="uid://f61e0lpd6s2r" path="res://scripts/bloody_sprite.gd" id="8_bloody"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8j8pn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ni3s5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_dwmhh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_q3x0e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_q3x0e")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_rpx01")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_kva4e")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_rpx01")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8j8pn"]
+radius = 37.0
+height = 218.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bat"]
+shader = ExtResource("7_overlay")
+shader_parameter/amount = 0.0
+shader_parameter/blood_color = Color(0.72, 0.03, 0.05, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8j8pn"]
+size = Vector2(166, 65)
+
+[sub_resource type="Animation" id="Animation_yp4pk"]
+resource_name = "BatAnimation"
+length = 0.4
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bat/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(-102, -109), Vector2(-75, -33), Vector2(141, -41)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Bat/Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.09999999, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [-2.443461, -3.1415927, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bat:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_3d6w8"]
+resource_name = "BatIdle"
+length = 0.40002000596076254
+loop_mode = 1
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bat/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(-102, -109), Vector2(-102, -88)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Bat/Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [-2.443461, -2.443461]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bat:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, false]
+}
+
+[sub_resource type="Animation" id="Animation_p147e"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Bat/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-102, -109)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Bat/Sprite2D:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-2.443461]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Bat:monitoring")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_o6m0o"]
+_data = {
+&"BatAnimation": SubResource("Animation_yp4pk"),
+&"BatIdle": SubResource("Animation_3d6w8"),
+&"RESET": SubResource("Animation_p147e")
+}
+
+[node name="Butcher" type="CharacterBody2D" unique_id=1722772987]
+script = ExtResource("1_dwmhh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=143568686]
+sprite_frames = SubResource("SpriteFrames_8j8pn")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=805882893]
+position = Vector2(0, 48)
+shape = SubResource("CapsuleShape2D_8j8pn")
+
+[node name="Bat" type="Area2D" parent="." unique_id=194581429]
+monitoring = false
+monitorable = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Bat" unique_id=1889563106]
+material = SubResource("ShaderMaterial_bat")
+position = Vector2(-102, -109)
+rotation = -2.443461
+texture = ExtResource("6_c2fju")
+script = ExtResource("8_bloody")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bat" unique_id=1782789267]
+position = Vector2(154, -42)
+shape = SubResource("RectangleShape2D_8j8pn")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1979682463]
+libraries/ = SubResource("AnimationLibrary_o6m0o")
+autoplay = &"BatIdle"
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="area_entered" from="Bat" to="." method="_on_bat_area_entered"]
+[connection signal="area_entered" from="Bat" to="Bat/Sprite2D" method="add_blood"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

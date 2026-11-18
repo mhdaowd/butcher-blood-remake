@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://6ao7rhxel2h4"]
+
+[ext_resource type="Script" uid="uid://bpd5e7ulk5xyp" path="res://scripts/blood_system.gd" id="1_system"]
+[ext_resource type="Script" uid="uid://cr4oi24rt2iq" path="res://scripts/blood_grid.gd" id="2_grid"]
+[ext_resource type="Script" uid="uid://c8vxqus21s7gf" path="res://scripts/blood_canvas.gd" id="3_canvas"]
+[ext_resource type="Script" uid="uid://qemce1f661w0" path="res://scripts/stamp_layer.gd" id="4_stamps"]
+[ext_resource type="Script" uid="uid://bfpr8kl0ed8sr" path="res://scripts/blood_pools.gd" id="5_pools"]
+[ext_resource type="Script" uid="uid://ctvou7b7g5i5a" path="res://scripts/blood_drips.gd" id="6_drips"]
+[ext_resource type="Script" uid="uid://iopyrbwt25j3" path="res://scripts/blood_drops.gd" id="7_drops"]
+[ext_resource type="Script" uid="uid://3ecpx3pqbr1j" path="res://scripts/blood_runners.gd" id="8_runners"]
+[ext_resource type="Script" uid="uid://48ycwmqgs2ma" path="res://scripts/blood_seeps.gd" id="9_seeps"]
+[ext_resource type="Script" uid="uid://d2g37c0evdhya" path="res://scripts/blood_impacts.gd" id="10_impacts"]
+[ext_resource type="Shader" uid="uid://funwlgm7vxms" path="res://shaders/blood_stamp.gdshader" id="11_stamp_sh"]
+[ext_resource type="Shader" uid="uid://ddu31642ufbgk" path="res://shaders/blood_canvas.gdshader" id="12_canvas_sh"]
+[ext_resource type="Shader" uid="uid://defhcf214tm6y" path="res://shaders/blood_pool.gdshader" id="13_pool_sh"]
+[ext_resource type="Shader" uid="uid://d04l5exsiybex" path="res://shaders/blood_drop.gdshader" id="14_drop_sh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_stamp"]
+shader = ExtResource("11_stamp_sh")
+
+[sub_resource type="Gradient" id="Gradient_soft"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_soft"]
+gradient = SubResource("Gradient_soft")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_canvas"]
+shader = ExtResource("12_canvas_sh")
+shader_parameter/cell = 32.0
+shader_parameter/threshold = 0.5
+shader_parameter/shine = 0.55
+shader_parameter/light_direction = Vector3(-0.45, -0.55, 0.7)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ryufh"]
+viewport_path = NodePath("Canvas/Viewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pool"]
+shader = ExtResource("13_pool_sh")
+shader_parameter/pool_color = Color(0.55, 0.02, 0.05, 0.95)
+shader_parameter/box_height = 8.0
+shader_parameter/max_height = 5.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_pool"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_pools"]
+use_custom_data = true
+visible_instance_count = 0
+mesh = SubResource("QuadMesh_pool")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drop"]
+shader = ExtResource("14_drop_sh")
+shader_parameter/base_color = Color(0.72, 0.03, 0.05, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_drop"]
+size = Vector2(2, 2)
+
+[sub_resource type="MultiMesh" id="MultiMesh_drips"]
+use_custom_data = true
+visible_instance_count = 0
+mesh = SubResource("QuadMesh_drop")
+
+[sub_resource type="MultiMesh" id="MultiMesh_drops"]
+use_custom_data = true
+visible_instance_count = 0
+mesh = SubResource("QuadMesh_drop")
+
+[node name="BloodSystem" type="Node2D" unique_id=81779012 node_paths=PackedStringArray("grid", "drops") groups=["blood"]]
+script = ExtResource("1_system")
+grid = NodePath("Grid")
+drops = NodePath("Drops")
+
+[node name="Grid" type="Node" parent="." unique_id=790671454]
+script = ExtResource("2_grid")
+
+[node name="Canvas" type="Node2D" parent="." unique_id=127623952 node_paths=PackedStringArray("grid")]
+script = ExtResource("3_canvas")
+grid = NodePath("../Grid")
+
+[node name="Viewport" type="SubViewport" parent="Canvas" unique_id=1878025414]
+disable_3d = true
+transparent_bg = true
+gui_disable_input = true
+render_target_clear_mode = 2
+render_target_update_mode = 1
+
+[node name="Stamps" type="Node2D" parent="Canvas/Viewport" unique_id=1797117094]
+material = SubResource("ShaderMaterial_stamp")
+script = ExtResource("4_stamps")
+texture = SubResource("GradientTexture2D_soft")
+
+[node name="View" type="Sprite2D" parent="Canvas" unique_id=152654357]
+texture_filter = 1
+material = SubResource("ShaderMaterial_canvas")
+texture = SubResource("ViewportTexture_ryufh")
+centered = false
+
+[node name="Pools" type="MultiMeshInstance2D" parent="." unique_id=391047872 node_paths=PackedStringArray("grid", "canvas", "seeps")]
+material = SubResource("ShaderMaterial_pool")
+multimesh = SubResource("MultiMesh_pools")
+script = ExtResource("5_pools")
+grid = NodePath("../Grid")
+canvas = NodePath("../Canvas")
+seeps = NodePath("../Seeps")
+
+[node name="Drips" type="MultiMeshInstance2D" parent="." unique_id=478816105]
+z_index = 5
+material = SubResource("ShaderMaterial_drop")
+multimesh = SubResource("MultiMesh_drips")
+script = ExtResource("6_drips")
+
+[node name="Drops" type="MultiMeshInstance2D" parent="." unique_id=51953757 node_paths=PackedStringArray("grid", "impacts")]
+z_index = 10
+material = SubResource("ShaderMaterial_drop")
+multimesh = SubResource("MultiMesh_drops")
+script = ExtResource("7_drops")
+grid = NodePath("../Grid")
+impacts = NodePath("../Impacts")
+
+[node name="Runners" type="Node" parent="." unique_id=1953942986 node_paths=PackedStringArray("grid", "canvas", "pools", "seeps")]
+script = ExtResource("8_runners")
+grid = NodePath("../Grid")
+canvas = NodePath("../Canvas")
+pools = NodePath("../Pools")
+seeps = NodePath("../Seeps")
+
+[node name="Seeps" type="Node" parent="." unique_id=543892573 node_paths=PackedStringArray("canvas")]
+script = ExtResource("9_seeps")
+canvas = NodePath("../Canvas")
+
+[node name="Impacts" type="Node" parent="." unique_id=102796985 node_paths=PackedStringArray("canvas", "grid", "pools", "runners", "drips", "seeps")]
+script = ExtResource("10_impacts")
+canvas = NodePath("../Canvas")
+grid = NodePath("../Grid")
+pools = NodePath("../Pools")
+runners = NodePath("../Runners")
+drips = NodePath("../Drips")
+seeps = NodePath("../Seeps")
+
+[connection signal="drop_released" from="Drips" to="Drops" method="spawn"]
+[connection signal="drop_released" from="Runners" to="Drops" method="spawn"]
+[connection signal="splash" from="Impacts" to="Drops" method="spawn"]
